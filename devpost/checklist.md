@@ -19,7 +19,7 @@ Build mode: fast
   Learner check: Start the stack locally, log in with the test teacher credentials, and say whether the Dashboard/sidebar look and feel match Study Hack enough to continue.
   Commit: `Add teacher login and dashboard shell`
 
-- [ ] **2. Teacher can create a student group and add students**
+- [x] **2. Teacher can create a student group and add students**
   Becomes usable: From the sidebar, create a group by name, open it, add students (first name, last name, email); empty states and modals work; Dashboard student/group counts update.
   Why now: Roster is required before admit cards and exams; proves CRUD persistence early without AI risk.
   PRD ref: `prd.md > Student Groups`

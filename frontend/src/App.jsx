@@ -3,6 +3,8 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { fetchMe, getToken } from './api/client'
 import AppLayout from './components/AppLayout'
 import DashboardPage from './pages/DashboardPage'
+import GroupDetailPage from './pages/GroupDetailPage'
+import GroupsPage from './pages/GroupsPage'
 import LoginPage from './pages/LoginPage'
 import PlaceholderPage from './pages/PlaceholderPage'
 
@@ -37,7 +39,8 @@ function ProtectedRoutes() {
     <Routes>
       <Route element={<AppLayout teacher={teacher} />}>
         <Route index element={<DashboardPage />} />
-        <Route path="groups" element={<PlaceholderPage title="Student Groups" />} />
+        <Route path="groups" element={<GroupsPage />} />
+        <Route path="groups/:groupId" element={<GroupDetailPage />} />
         <Route path="papers" element={<PlaceholderPage title="Question Papers" />} />
         <Route path="exams" element={<PlaceholderPage title="Exams" />} />
       </Route>
