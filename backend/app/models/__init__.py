@@ -1,5 +1,7 @@
 from app.models.entities import (
     AdmitCard,
+    Answer,
+    Attempt,
     Exam,
     Question,
     QuestionPaper,
@@ -10,6 +12,8 @@ from app.models.entities import (
 
 __all__ = [
     "AdmitCard",
+    "Answer",
+    "Attempt",
     "Teacher",
     "StudentGroup",
     "Student",

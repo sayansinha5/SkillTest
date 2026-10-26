@@ -99,3 +99,30 @@ class AdmitCard(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     student: Mapped["Student"] = relationship()
+
+
+class Attempt(Base):
+    __tablename__ = "attempts"
+    __table_args__ = (UniqueConstraint("exam_id", "admit_card_id", name="uq_attempt_exam_card"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    exam_id: Mapped[int] = mapped_column(ForeignKey("exams.id"), index=True)
+    admit_card_id: Mapped[int] = mapped_column(ForeignKey("admit_cards.id"), index=True)
+    student_id: Mapped[int] = mapped_column(ForeignKey("students.id"), index=True)
+    status: Mapped[str] = mapped_column(String(20), default="in_progress")
+    started_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    submitted_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+
+    answers: Mapped[list["Answer"]] = relationship(back_populates="attempt", cascade="all, delete-orphan")
+
+
+class Answer(Base):
+    __tablename__ = "answers"
+    __table_args__ = (UniqueConstraint("attempt_id", "question_id", name="uq_answer_attempt_question"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    attempt_id: Mapped[int] = mapped_column(ForeignKey("attempts.id"), index=True)
+    question_id: Mapped[int] = mapped_column(ForeignKey("questions.id"), index=True)
+    selected_option: Mapped[str | None] = mapped_column(String(8), nullable=True)
+
+    attempt: Mapped["Attempt"] = relationship(back_populates="answers")

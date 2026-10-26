@@ -20,6 +20,16 @@ def late_cutoff_at(exam: Exam) -> datetime | None:
     return exam.activated_at + timedelta(seconds=exam.late_duration_seconds)
 
 
+SUBMIT_GRACE_SECONDS = 30
+
+
+def accepts_answers(exam: Exam) -> bool:
+    """Answers and the final submit are accepted until a short grace period after the end,
+    because the browser owns the countdown and its auto-submit can arrive a moment late."""
+    end = ends_at(exam)
+    return bool(end) and utcnow() < end + timedelta(seconds=SUBMIT_GRACE_SECONDS)
+
+
 def current_status(exam: Exam) -> str:
     if not exam.activated_at:
         return "inactive"

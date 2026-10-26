@@ -55,3 +55,26 @@ class PortalLoginResponse(BaseModel):
     student_name: str
     exam_name: str
     ends_at: str | None
+
+
+class PortalQuestion(BaseModel):
+    id: int
+    stem: str
+    options: dict[str, str]
+    marks: int
+
+
+class PortalSession(BaseModel):
+    exam_name: str
+    student_name: str
+    total_marks: int
+    duration_seconds: int
+    ends_at: str | None
+    server_now: str
+    status: str
+    questions: list[PortalQuestion]
+    answers: dict[int, str | None]
+
+
+class AnswerUpdate(BaseModel):
+    selected_option: str | None = Field(default=None, pattern="^[ABCD]$")

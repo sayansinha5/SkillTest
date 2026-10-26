@@ -49,7 +49,7 @@ Build mode: fast
   Learner check: Create an exam, generate admit cards, copy the link, try it before and after Activate, and note whether that matches your intent.
   Commit: `Add exams, admit cards, and activation`
 
-- [ ] **5. Student can take the exam in the portal (with demo fill)**
+- [x] **5. Student can take the exam in the portal (with demo fill)**
   Becomes usable: Exam portal login with admit ID/password; instructions; MCQ UI (prev/next/clear); browser countdown; early submit and timeout submit; thank-you; completed students cannot re-login; late login blocked when configured; demo control fills answers and opens confirm-end.
   Why now: Completes the delivery path so Results have real attempts; exercises the agreed client clock + server gate split.
   PRD ref: `prd.md > Exam portal (student)`, `prd.md > The Core Journey` (steps 6–7)
@@ -97,5 +97,6 @@ Activity mode:
 - Activate is one-way (switch locks on once the clock starts) and admit card passwords are stored in plain text so the teacher can re-read them — PoC simplifications consistent with `spec.md > Data Model`.
 - Exam portal login page (`/exam/:token`) built in slice 4 rather than 5 — needed to verify the server login gates; slice 5 adds the question-taking UI on top.
 - Answer-option shuffling deferred (learner decision, early checkpoint) — AI-generated MCQs tend to place the correct answer at A; acceptable for the PoC, revisit later.
+- Browser owns the exam clock; the server accepts answer saves and submits until 30 seconds after the end time so a time-up auto-submit isn't lost to small clock drift (resolves the spec's open timing question).
 
 - Demo teacher email set to `teacher@example.com` — email-validator rejects reserved domains like `.local` / `.test`.
