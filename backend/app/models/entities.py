@@ -84,3 +84,18 @@ class Exam(Base):
     activated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     published_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class AdmitCard(Base):
+    __tablename__ = "admit_cards"
+    __table_args__ = (UniqueConstraint("exam_id", "student_id", name="uq_admit_exam_student"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    exam_id: Mapped[int] = mapped_column(ForeignKey("exams.id"), index=True)
+    student_id: Mapped[int] = mapped_column(ForeignKey("students.id"), index=True)
+    admit_id: Mapped[str] = mapped_column(String(32), unique=True, index=True)
+    # Stored in plain text so the teacher can re-read it in the admit card table (accepted PoC risk).
+    password: Mapped[str] = mapped_column(String(32))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+    student: Mapped["Student"] = relationship()

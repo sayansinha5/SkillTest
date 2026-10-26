@@ -1,6 +1,15 @@
-from app.models.entities import Exam, Question, QuestionPaper, Student, StudentGroup, Teacher
+from app.models.entities import (
+    AdmitCard,
+    Exam,
+    Question,
+    QuestionPaper,
+    Student,
+    StudentGroup,
+    Teacher,
+)
 
 __all__ = [
+    "AdmitCard",
     "Teacher",
     "StudentGroup",
     "Student",

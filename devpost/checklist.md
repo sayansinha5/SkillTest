@@ -39,7 +39,7 @@ Build mode: fast
   Learner check: Run the paper wizard with a sample book PDF and confirm the generated MCQs look usable for an exam.
   Commit: `Add PDF-to-MCQ question paper flow`
 
-- [ ] **4. Teacher can create an exam, generate admit cards, and activate it**
+- [x] **4. Teacher can create an exam, generate admit cards, and activate it**
   Becomes usable: Create exam (group, paper, duration, optional late duration); inactive share link; admit card table (ID, password) with copyable link; Activate sets `activated_at`; server rejects student start while inactive.
   Why now: Connects roster + paper into a runnable exam session; server login gates land here before the student UI.
   PRD ref: `prd.md > Exams, admit cards, and activation`
@@ -94,6 +94,8 @@ Activity mode:
 
 - Wizard review step now lists all options with the correct one highlighted — learner found only "Correct: X" was shown at the early checkpoint.
 - Question marks = paper total ÷ question count, remainder spread over the first questions — generated MCQs were 1 mark each, so scores didn't match total marks (learner decision).
+- Activate is one-way (switch locks on once the clock starts) and admit card passwords are stored in plain text so the teacher can re-read them — PoC simplifications consistent with `spec.md > Data Model`.
+- Exam portal login page (`/exam/:token`) built in slice 4 rather than 5 — needed to verify the server login gates; slice 5 adds the question-taking UI on top.
 - Answer-option shuffling deferred (learner decision, early checkpoint) — AI-generated MCQs tend to place the correct answer at A; acceptable for the PoC, revisit later.
 
 - Demo teacher email set to `teacher@example.com` — email-validator rejects reserved domains like `.local` / `.test`.

@@ -49,7 +49,7 @@ export default function DashboardPage() {
         ))}
       </div>
       <p className="mt-8 text-sm text-slate-500">
-        Use the sidebar for Student Groups, Question Papers, and Exams — coming in the next build slices.
+        Use the sidebar to manage Student Groups, Question Papers, and Exams.
       </p>
     </div>
   )

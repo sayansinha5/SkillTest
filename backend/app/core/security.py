@@ -16,19 +16,23 @@ def verify_password(plain: str, hashed: str) -> bool:
     return bcrypt.checkpw(plain.encode("utf-8"), hashed.encode("utf-8"))
 
 
-def create_access_token(subject: str) -> str:
-    expire = datetime.now(timezone.utc) + timedelta(minutes=settings.jwt_expire_minutes)
+def create_access_token(subject: str, role: str = "teacher", minutes: int | None = None) -> str:
+    expire = datetime.now(timezone.utc) + timedelta(
+        minutes=minutes if minutes is not None else settings.jwt_expire_minutes
+    )
     return jwt.encode(
-        {"sub": subject, "exp": expire},
+        {"sub": subject, "role": role, "exp": expire},
         settings.jwt_secret,
         algorithm=settings.jwt_algorithm,
     )
 
 
-def decode_access_token(token: str) -> str | None:
+def decode_access_token(token: str, role: str = "teacher") -> str | None:
     try:
         payload = jwt.decode(token, settings.jwt_secret, algorithms=[settings.jwt_algorithm])
-        sub = payload.get("sub")
-        return str(sub) if sub else None
     except JWTError:
         return None
+    if payload.get("role", "teacher") != role:
+        return None
+    sub = payload.get("sub")
+    return str(sub) if sub else None

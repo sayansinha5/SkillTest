@@ -3,12 +3,14 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { fetchMe, getToken } from './api/client'
 import AppLayout from './components/AppLayout'
 import DashboardPage from './pages/DashboardPage'
+import ExamDetailPage from './pages/ExamDetailPage'
+import ExamPortalPage from './pages/ExamPortalPage'
+import ExamsPage from './pages/ExamsPage'
 import GroupDetailPage from './pages/GroupDetailPage'
 import GroupsPage from './pages/GroupsPage'
 import LoginPage from './pages/LoginPage'
 import PaperDetailPage from './pages/PaperDetailPage'
 import PapersPage from './pages/PapersPage'
-import PlaceholderPage from './pages/PlaceholderPage'
 
 function ProtectedRoutes() {
   const [teacher, setTeacher] = useState(null)
@@ -45,7 +47,8 @@ function ProtectedRoutes() {
         <Route path="groups/:groupId" element={<GroupDetailPage />} />
         <Route path="papers" element={<PapersPage />} />
         <Route path="papers/:paperId" element={<PaperDetailPage />} />
-        <Route path="exams" element={<PlaceholderPage title="Exams" />} />
+        <Route path="exams" element={<ExamsPage />} />
+        <Route path="exams/:examId" element={<ExamDetailPage />} />
       </Route>
     </Routes>
   )
@@ -56,6 +59,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/exam/:token" element={<ExamPortalPage />} />
         <Route path="/*" element={<ProtectedRoutes />} />
       </Routes>
     </BrowserRouter>
