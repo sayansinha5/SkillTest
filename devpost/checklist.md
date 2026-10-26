@@ -29,7 +29,7 @@ Build mode: fast
   Learner check: Create a group, add a student, refresh the page, and confirm the student is still there.
   Commit: `Add student groups and students`
 
-- [ ] **3. Teacher can generate an MCQ paper from a book PDF**
+- [x] **3. Teacher can generate an MCQ paper from a book PDF**
   Becomes usable: Multi-step paper wizard: name/total marks → upload PDF → extract text (error if fail) → OpenAI chapters → select chapters/weights/question count (defaults: first 3, equal weights, 5) → generate MCQs with correct options saved; paper reviewable in the app.
   Why now: Highest external risk (pypdf + OpenAI) and feeds the exam; fail here early before building the rest of the journey.
   PRD ref: `prd.md > Question Papers`

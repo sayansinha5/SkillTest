@@ -16,5 +16,5 @@ backend/.venv/
 
 # Uploads / local data
 backend/uploads/
-sample-data/*.pdf
 !sample-data/.gitkeep
+!sample-data/grade7-physics-sample.pdf

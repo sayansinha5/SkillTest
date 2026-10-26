@@ -6,6 +6,8 @@ import DashboardPage from './pages/DashboardPage'
 import GroupDetailPage from './pages/GroupDetailPage'
 import GroupsPage from './pages/GroupsPage'
 import LoginPage from './pages/LoginPage'
+import PaperDetailPage from './pages/PaperDetailPage'
+import PapersPage from './pages/PapersPage'
 import PlaceholderPage from './pages/PlaceholderPage'
 
 function ProtectedRoutes() {
@@ -41,7 +43,8 @@ function ProtectedRoutes() {
         <Route index element={<DashboardPage />} />
         <Route path="groups" element={<GroupsPage />} />
         <Route path="groups/:groupId" element={<GroupDetailPage />} />
-        <Route path="papers" element={<PlaceholderPage title="Question Papers" />} />
+        <Route path="papers" element={<PapersPage />} />
+        <Route path="papers/:paperId" element={<PaperDetailPage />} />
         <Route path="exams" element={<PlaceholderPage title="Exams" />} />
       </Route>
     </Routes>
