@@ -2,6 +2,54 @@
 
 Teacher-focused exam platform for small tutors and coaching centres (Devpost Learn PoC).
 
+An AI-assisted exam system for small private tutors and coaching centres. Motivation: quality education. When one teacher handles many students, most of them get overlooked, so the goal is to help teachers teach better and students improve.
+
+## Project Screenshots
+
+Flow is teacher portal → generated paper → student exam → published results.
+
+### Teacher portal
+
+**Login**
+
+![Teacher portal login](assets/Screenshot09.png)
+
+**Dashboard** — students, groups, papers, and exams at a glance
+
+![Teacher dashboard](assets/Screenshot05.png)
+
+**Question paper** — AI-generated MCQs from a book PDF, with correct options marked
+
+![Generated question paper](assets/Screenshot04.png)
+
+### Student exam portal
+
+**Instructions** — welcome, rules, remaining time, then begin
+
+![Exam instructions](assets/Screenshot06.png)
+
+**Taking the exam** — first question, question map, and timer
+
+![Exam question 1](assets/Screenshot10.png)
+
+**In progress** — answered questions on the map, Previous / Next / Clear
+
+![Exam question in progress](assets/Screenshot01.png)
+
+**Submit** — confirm attempted vs unanswered, then submit (cannot log in again)
+
+![End exam confirmation](assets/Screenshot03.png)
+
+**Submitted**
+
+![Exam submitted](assets/Screenshot07.png)
+
+### Results
+
+**Published class report** — scores, absentees, chapter/question performance, and per-student report cards
+
+![Published exam results](assets/Screenshot02.png)
+
 ## Stack
 
 - `frontend/` — React (JSX), Tailwind CSS, axios
