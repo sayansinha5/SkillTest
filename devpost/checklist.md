@@ -81,13 +81,13 @@ Build mode: fast
 ## Code Tour and App Map
 
 - [x] Learning activity complete — guided route, focused alternative, prior practice connected, or brief recap
-- [ ] Optional edit and transfer reflection addressed — offered/declined/already covered/not applicable as appropriate
+- [x] Optional edit and transfer reflection addressed — offered/declined/already covered/not applicable as appropriate
 - [x] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
 
 Activity and evidence: Prior practice connected — at the early checkpoint, inspecting generated questions (not just a successful request) exposed 1-mark questions and answers clustered on A; learner chose the marks fix and deliberately deferred shuffling (see Revisions).
 Route and stops: Reference route only (not toured) — Autocheck: `StudentResultPage.jsx` `autocheck` → `results.py` `autocheck_student` / `_check_attempt` → `scoring.py` `score_attempt` + `openai_client.py` `write_student_report`.
 Edit outcome: Not applicable — focused alternative for an experienced plan-first learner.
-Reflection: Offered.
+Reflection: Offered and answered (recorded in the private learner profile).
 Activity mode: Focused alternative (prior practice connected), fast mode.
 
 ## Revisions
