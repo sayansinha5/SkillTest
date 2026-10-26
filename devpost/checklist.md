@@ -72,23 +72,23 @@ Build mode: fast
 ## Hands-on Checkpoints
 
 - [x] Early usable behavior explored — after slice 3 (PDF→MCQ paper works); feedback can still shape exam portal and results UX
-- [ ] Final kick-the-tires exploration and feedback completed
+- [x] Final kick-the-tires exploration and feedback completed — learner ran the full journey (exam → portal demo fill → results → publish) and confirmed it works
 
 ## Final Review
 
-- [ ] Final review complete — feedback resolved and learner confirms ready to ship
+- [x] Final review complete — feedback resolved and learner confirms ready to ship (no further changes requested)
 
 ## Code Tour and App Map
 
-- [ ] Learning activity complete — guided route, focused alternative, prior practice connected, or brief recap
+- [x] Learning activity complete — guided route, focused alternative, prior practice connected, or brief recap
 - [ ] Optional edit and transfer reflection addressed — offered/declined/already covered/not applicable as appropriate
-- [ ] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
+- [x] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
 
-Activity and evidence: 
-Route and stops: 
-Edit outcome: 
-Reflection: 
-Activity mode: 
+Activity and evidence: Prior practice connected — at the early checkpoint, inspecting generated questions (not just a successful request) exposed 1-mark questions and answers clustered on A; learner chose the marks fix and deliberately deferred shuffling (see Revisions).
+Route and stops: Reference route only (not toured) — Autocheck: `StudentResultPage.jsx` `autocheck` → `results.py` `autocheck_student` / `_check_attempt` → `scoring.py` `score_attempt` + `openai_client.py` `write_student_report`.
+Edit outcome: Not applicable — focused alternative for an experienced plan-first learner.
+Reflection: Offered.
+Activity mode: Focused alternative (prior practice connected), fast mode.
 
 ## Revisions
 
