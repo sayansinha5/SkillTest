@@ -314,7 +314,8 @@ export default function PapersPage() {
                   {generated.questions.map((q, i) => (
                     <li key={q.id} className="rounded border border-slate-200 p-3">
                       <p className="font-medium text-ink">
-                        {i + 1}. {q.stem}
+                        {i + 1}. {q.stem}{' '}
+                        <span className="text-xs font-normal text-slate-500">({q.marks} marks)</span>
                       </p>
                       <ul className="mt-2 space-y-1 text-slate-600">
                         {Object.entries(q.options || {}).map(([key, text]) => (

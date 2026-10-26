@@ -71,7 +71,7 @@ Build mode: fast
 
 ## Hands-on Checkpoints
 
-- [ ] Early usable behavior explored — after slice 3 (PDF→MCQ paper works); feedback can still shape exam portal and results UX
+- [x] Early usable behavior explored — after slice 3 (PDF→MCQ paper works); feedback can still shape exam portal and results UX
 - [ ] Final kick-the-tires exploration and feedback completed
 
 ## Final Review
@@ -91,5 +91,9 @@ Reflection:
 Activity mode: 
 
 ## Revisions
+
+- Wizard review step now lists all options with the correct one highlighted — learner found only "Correct: X" was shown at the early checkpoint.
+- Question marks = paper total ÷ question count, remainder spread over the first questions — generated MCQs were 1 mark each, so scores didn't match total marks (learner decision).
+- Answer-option shuffling deferred (learner decision, early checkpoint) — AI-generated MCQs tend to place the correct answer at A; acceptable for the PoC, revisit later.
 
 - Demo teacher email set to `teacher@example.com` — email-validator rejects reserved domains like `.local` / `.test`.

@@ -143,8 +143,10 @@ def generate_paper(
     except Exception as exc:  # noqa: BLE001
         raise HTTPException(status_code=502, detail=f"Question generation failed: {exc}") from exc
 
+    base_marks, extra = divmod(paper.total_marks, len(generated))
+
     db.query(Question).filter(Question.paper_id == paper.id).delete()
-    for q in generated:
+    for i, q in enumerate(generated):
         db.add(
             Question(
                 paper_id=paper.id,
@@ -152,7 +154,7 @@ def generate_paper(
                 stem=q["stem"],
                 options_json=json.dumps(q["options"]),
                 correct_option=q["correct_option"],
-                marks=q["marks"],
+                marks=base_marks + (1 if i < extra else 0),
             )
         )
     paper.status = "ready"

@@ -34,7 +34,8 @@ export default function PaperDetailPage() {
             {paper.questions.map((q, i) => (
               <li key={q.id} className="rounded-lg border border-slate-200 bg-card p-4 text-sm">
                 <p className="font-medium text-ink">
-                  {i + 1}. {q.stem}
+                  {i + 1}. {q.stem}{' '}
+                  <span className="text-xs font-normal text-slate-500">({q.marks} marks)</span>
                 </p>
                 <ul className="mt-2 grid gap-1 text-slate-600 sm:grid-cols-2">
                   {Object.entries(q.options || {}).map(([k, v]) => (
