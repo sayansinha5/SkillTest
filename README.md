@@ -81,13 +81,25 @@ Wait until MySQL is ready (first start can take ~30s).
 
 ```bash
 cd backend
+```
+```bash
 python -m venv .venv
+```
+```bash
 .\.venv\Scripts\activate
+```
+```bash
 pip install -r requirements.txt
+```
+```bash
 copy .env.example .env
+```
 # edit .env if needed
+```bash
 uvicorn app.main:app --reload --port 8000
 ```
+
+- Setup the .env, fill the required fields, the AI_PROVIDER, AI_MODEL and AI_API_KEY
 
 Run uvicorn from the `backend/` directory so `.env` and the `app` package resolve.
 
@@ -95,7 +107,11 @@ Run uvicorn from the `backend/` directory so `.env` and the `app` package resolv
 
 ```bash
 cd frontend
+```
+```bash
 npm install
+```
+```bash
 npm run dev
 ```
 
