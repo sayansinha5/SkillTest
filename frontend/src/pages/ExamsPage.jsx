@@ -6,6 +6,8 @@ const STATUS_STYLES = {
   inactive: 'bg-slate-100 text-slate-600',
   active: 'bg-primary/15 text-primary',
   ended: 'bg-accent/10 text-accent',
+  completed: 'bg-amber-100 text-amber-700',
+  published: 'bg-primary text-white',
 }
 
 function toSeconds(value, unit) {

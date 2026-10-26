@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import auth, dashboard, exams, groups, papers, portal
+from app.api import auth, dashboard, exams, groups, papers, portal, results
 from app.core.config import get_settings
 from app.core.db import Base, SessionLocal, engine
 from app.services.seed import seed_teacher
@@ -24,6 +24,7 @@ app.include_router(groups.router, prefix="/api")
 app.include_router(papers.router, prefix="/api")
 app.include_router(exams.router, prefix="/api")
 app.include_router(portal.router, prefix="/api")
+app.include_router(results.router, prefix="/api")
 
 
 @app.on_event("startup")

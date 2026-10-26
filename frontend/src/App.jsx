@@ -11,6 +11,7 @@ import GroupsPage from './pages/GroupsPage'
 import LoginPage from './pages/LoginPage'
 import PaperDetailPage from './pages/PaperDetailPage'
 import PapersPage from './pages/PapersPage'
+import StudentResultPage from './pages/StudentResultPage'
 
 function ProtectedRoutes() {
   const [teacher, setTeacher] = useState(null)
@@ -49,6 +50,7 @@ function ProtectedRoutes() {
         <Route path="papers/:paperId" element={<PaperDetailPage />} />
         <Route path="exams" element={<ExamsPage />} />
         <Route path="exams/:examId" element={<ExamDetailPage />} />
+        <Route path="exams/:examId/results/:admitCardId" element={<StudentResultPage />} />
       </Route>
     </Routes>
   )

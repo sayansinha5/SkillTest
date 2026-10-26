@@ -126,3 +126,24 @@ class Answer(Base):
     selected_option: Mapped[str | None] = mapped_column(String(8), nullable=True)
 
     attempt: Mapped["Attempt"] = relationship(back_populates="answers")
+
+
+class StudentReport(Base):
+    __tablename__ = "student_reports"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    attempt_id: Mapped[int] = mapped_column(ForeignKey("attempts.id"), unique=True, index=True)
+    score: Mapped[int] = mapped_column(Integer, default=0)
+    max_score: Mapped[int] = mapped_column(Integer, default=0)
+    report_json: Mapped[str] = mapped_column(Text)
+    checked_at: Mapped[datetime] = mapped_column(DateTime)
+
+
+class ExamReview(Base):
+    __tablename__ = "exam_reviews"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    exam_id: Mapped[int] = mapped_column(ForeignKey("exams.id"), unique=True, index=True)
+    class_report_json: Mapped[str | None] = mapped_column(Text, nullable=True)
+    class_report_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)

@@ -59,7 +59,7 @@ Build mode: fast
   Learner check: Open the exam link with an admit card, use the demo fill path (or answer briefly), end the exam, and confirm you land on thank-you and cannot log in again.
   Commit: `Add exam portal taking and demo submit`
 
-- [ ] **6. Teacher can autocheck, see AI reports, and publish results**
+- [x] **6. Teacher can autocheck, see AI reports, and publish results**
   Becomes usable: Results tab with participation (including absents after end), class question performance, per-student view; Autocheck and Bulk autocheck (code MCQ score + OpenAI report); mark complete and publish on the teacher side.
   Why now: Delivers `scope.md > The Unique Kernel` once real attempts exist—diagnostic reports and class performance, not just scores.
   PRD ref: `prd.md > Results, AI reports, and publish`, `scope.md > The Unique Kernel`
@@ -98,5 +98,6 @@ Activity mode:
 - Exam portal login page (`/exam/:token`) built in slice 4 rather than 5 — needed to verify the server login gates; slice 5 adds the question-taking UI on top.
 - Answer-option shuffling deferred (learner decision, early checkpoint) — AI-generated MCQs tend to place the correct answer at A; acceptable for the PoC, revisit later.
 - Browser owns the exam clock; the server accepts answer saves and submits until 30 seconds after the end time so a time-up auto-submit isn't lost to small clock drift (resolves the spec's open timing question).
+- Results finalize lazily: the first Results view after end + grace auto-submits leftover in-progress attempts and records absentees (no background job). Single Autocheck works on any submitted paper; Bulk autocheck needs the exam ended and also writes the AI class report. Mark complete requires every submitted paper checked and locks autocheck; Publish requires complete. Exams list shows `completed` / `published` statuses.
 
 - Demo teacher email set to `teacher@example.com` — email-validator rejects reserved domains like `.local` / `.test`.

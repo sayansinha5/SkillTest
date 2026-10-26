@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_teacher
 from app.core.db import get_db
-from app.models.entities import AdmitCard, Exam, Question, QuestionPaper, Student, StudentGroup, Teacher
+from app.models.entities import AdmitCard, Exam, ExamReview, Question, QuestionPaper, Student, StudentGroup, Teacher
 from app.schemas.exams import AdmitCardOut, ExamCreate, ExamDetail, ExamOut
 from app.services.exam_timing import current_status, ends_at, iso_utc, utcnow
 
@@ -15,11 +15,20 @@ router = APIRouter(prefix="/exams", tags=["exams"])
 _PASSWORD_ALPHABET = string.ascii_letters + string.digits
 
 
-def _owned_exam(db: Session, teacher: Teacher, exam_id: int) -> Exam:
+def get_owned_exam(db: Session, teacher: Teacher, exam_id: int) -> Exam:
     exam = db.query(Exam).filter(Exam.id == exam_id, Exam.teacher_id == teacher.id).first()
     if not exam:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Exam not found")
     return exam
+
+
+def review_status(db: Session, exam: Exam) -> str:
+    if exam.published_at:
+        return "published"
+    review = db.query(ExamReview).filter(ExamReview.exam_id == exam.id).first()
+    if review and review.completed_at:
+        return "completed"
+    return current_status(exam)
 
 
 def _exam_out(db: Session, exam: Exam) -> dict:
@@ -35,7 +44,7 @@ def _exam_out(db: Session, exam: Exam) -> dict:
         "duration_seconds": exam.duration_seconds,
         "late_duration_seconds": exam.late_duration_seconds,
         "share_token": exam.share_token,
-        "status": current_status(exam),
+        "status": review_status(db, exam),
         "activated_at": iso_utc(exam.activated_at),
         "ends_at": iso_utc(ends_at(exam)),
     }
@@ -97,7 +106,7 @@ def get_exam(
     teacher: Teacher = Depends(get_current_teacher),
     db: Session = Depends(get_db),
 ) -> ExamDetail:
-    exam = _owned_exam(db, teacher, exam_id)
+    exam = get_owned_exam(db, teacher, exam_id)
     cards = db.query(AdmitCard).filter(AdmitCard.exam_id == exam.id).order_by(AdmitCard.id).all()
     student_count = (
         db.query(Student).filter(Student.group_id == exam.group_id).count() if exam.group_id else 0
@@ -125,7 +134,7 @@ def generate_admit_cards(
     teacher: Teacher = Depends(get_current_teacher),
     db: Session = Depends(get_db),
 ) -> ExamDetail:
-    exam = _owned_exam(db, teacher, exam_id)
+    exam = get_owned_exam(db, teacher, exam_id)
     if current_status(exam) != "inactive":
         raise HTTPException(status_code=400, detail="Admit cards can only be generated before activation")
     students = db.query(Student).filter(Student.group_id == exam.group_id).all()
@@ -154,7 +163,7 @@ def activate_exam(
     teacher: Teacher = Depends(get_current_teacher),
     db: Session = Depends(get_db),
 ) -> ExamDetail:
-    exam = _owned_exam(db, teacher, exam_id)
+    exam = get_owned_exam(db, teacher, exam_id)
     if exam.activated_at:
         raise HTTPException(status_code=400, detail="Exam is already activated")
     if not db.query(AdmitCard).filter(AdmitCard.exam_id == exam.id).count():

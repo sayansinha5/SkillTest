@@ -3,10 +3,12 @@ from app.models.entities import (
     Answer,
     Attempt,
     Exam,
+    ExamReview,
     Question,
     QuestionPaper,
     Student,
     StudentGroup,
+    StudentReport,
     Teacher,
 )
 
@@ -20,4 +22,6 @@ __all__ = [
     "QuestionPaper",
     "Question",
     "Exam",
+    "ExamReview",
+    "StudentReport",
 ]

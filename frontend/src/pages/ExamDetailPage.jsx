@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { api } from '../api/client'
+import ExamResults from '../components/ExamResults'
 import { StatusBadge } from './ExamsPage'
 
 function CopyButton({ text, label = 'Copy' }) {
@@ -20,15 +21,87 @@ function CopyButton({ text, label = 'Copy' }) {
   )
 }
 
+function LinkAndAdmitCards({ exam, examLink, isActive, busy, onGenerate }) {
+  return (
+    <>
+      <div className="mb-6 rounded-lg border border-slate-200 bg-card p-4">
+        <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-accent">Student exam link</p>
+        <div className="flex flex-wrap items-center gap-2">
+          <code className="break-all rounded bg-white px-2 py-1 text-sm text-ink">{examLink}</code>
+          <CopyButton text={examLink} label="Copy link" />
+        </div>
+        <p className="mt-2 text-xs text-slate-500">
+          {exam.status === 'inactive'
+            ? 'The link stays closed until you activate the exam.'
+            : exam.status === 'active'
+              ? 'The link is open until the exam ends.'
+              : 'The exam has ended; the link no longer accepts logins.'}
+        </p>
+      </div>
+
+      <div className="mb-3 flex items-center justify-between">
+        <h2 className="text-lg font-bold text-ink">Admit cards</h2>
+        {!isActive ? (
+          <button
+            type="button"
+            disabled={busy}
+            onClick={onGenerate}
+            className="rounded bg-primary px-4 py-2 text-sm font-semibold text-white disabled:opacity-60"
+          >
+            {exam.admit_cards.length ? 'Regenerate missing cards' : 'Generate admit cards'}
+          </button>
+        ) : null}
+      </div>
+
+      {exam.admit_cards.length === 0 ? (
+        <div className="rounded-lg border border-dashed border-slate-300 bg-card p-6 text-center text-sm text-slate-600">
+          No admit cards yet. Generate them for the {exam.student_count} student(s) in {exam.group_name}.
+        </div>
+      ) : (
+        <table className="w-full overflow-hidden rounded-lg border border-slate-200 text-left text-sm">
+          <thead className="bg-card text-xs uppercase text-slate-500">
+            <tr>
+              <th className="px-4 py-2">Student</th>
+              <th className="px-4 py-2">Admit card ID</th>
+              <th className="px-4 py-2">Password</th>
+              <th className="px-4 py-2" />
+            </tr>
+          </thead>
+          <tbody>
+            {exam.admit_cards.map((card) => (
+              <tr key={card.id} className="border-t border-slate-200">
+                <td className="px-4 py-2">
+                  <p className="font-medium text-ink">{card.student_name}</p>
+                  <p className="text-xs text-slate-500">{card.student_email}</p>
+                </td>
+                <td className="px-4 py-2 font-mono">{card.admit_id}</td>
+                <td className="px-4 py-2 font-mono">{card.password}</td>
+                <td className="px-4 py-2 text-right">
+                  <CopyButton
+                    text={`Exam: ${exam.name}\nLink: ${examLink}\nAdmit card ID: ${card.admit_id}\nPassword: ${card.password}`}
+                    label="Copy details"
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </>
+  )
+}
+
 export default function ExamDetailPage() {
   const { examId } = useParams()
   const [exam, setExam] = useState(null)
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
+  const [tab, setTab] = useState(null)
 
   async function load() {
     const { data } = await api.get(`/exams/${examId}`)
     setExam(data)
+    setTab((current) => current || (['inactive', 'active'].includes(data.status) ? 'setup' : 'results'))
   }
 
   useEffect(() => {
@@ -104,68 +177,36 @@ export default function ExamDetailPage() {
             </label>
           </div>
 
-          <div className="mb-6 rounded-lg border border-slate-200 bg-card p-4">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-accent">Student exam link</p>
-            <div className="flex flex-wrap items-center gap-2">
-              <code className="break-all rounded bg-white px-2 py-1 text-sm text-ink">{examLink}</code>
-              <CopyButton text={examLink} label="Copy link" />
+          {isActive ? (
+            <div className="mb-6 flex gap-1 border-b border-slate-200">
+              {[
+                ['setup', 'Link & admit cards'],
+                ['results', 'Results'],
+              ].map(([key, label]) => (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setTab(key)}
+                  className={`-mb-px border-b-2 px-4 py-2 text-sm font-semibold ${
+                    tab === key ? 'border-primary text-ink' : 'border-transparent text-slate-500 hover:text-ink'
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
             </div>
-            <p className="mt-2 text-xs text-slate-500">
-              {exam.status === 'inactive'
-                ? 'The link stays closed until you activate the exam.'
-                : exam.status === 'active'
-                  ? 'The link is open until the exam ends.'
-                  : 'The exam has ended; the link no longer accepts logins.'}
-            </p>
-          </div>
+          ) : null}
 
-          <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-lg font-bold text-ink">Admit cards</h2>
-            {!isActive ? (
-              <button
-                type="button"
-                disabled={busy}
-                onClick={() => run('admit-cards')}
-                className="rounded bg-primary px-4 py-2 text-sm font-semibold text-white disabled:opacity-60"
-              >
-                {exam.admit_cards.length ? 'Regenerate missing cards' : 'Generate admit cards'}
-              </button>
-            ) : null}
-          </div>
-
-          {exam.admit_cards.length === 0 ? (
-            <div className="rounded-lg border border-dashed border-slate-300 bg-card p-6 text-center text-sm text-slate-600">
-              No admit cards yet. Generate them for the {exam.student_count} student(s) in {exam.group_name}.
-            </div>
+          {isActive && tab === 'results' ? (
+            <ExamResults examId={examId} onStatusChange={load} />
           ) : (
-            <table className="w-full overflow-hidden rounded-lg border border-slate-200 text-left text-sm">
-              <thead className="bg-card text-xs uppercase text-slate-500">
-                <tr>
-                  <th className="px-4 py-2">Student</th>
-                  <th className="px-4 py-2">Admit card ID</th>
-                  <th className="px-4 py-2">Password</th>
-                  <th className="px-4 py-2" />
-                </tr>
-              </thead>
-              <tbody>
-                {exam.admit_cards.map((card) => (
-                  <tr key={card.id} className="border-t border-slate-200">
-                    <td className="px-4 py-2">
-                      <p className="font-medium text-ink">{card.student_name}</p>
-                      <p className="text-xs text-slate-500">{card.student_email}</p>
-                    </td>
-                    <td className="px-4 py-2 font-mono">{card.admit_id}</td>
-                    <td className="px-4 py-2 font-mono">{card.password}</td>
-                    <td className="px-4 py-2 text-right">
-                      <CopyButton
-                        text={`Exam: ${exam.name}\nLink: ${examLink}\nAdmit card ID: ${card.admit_id}\nPassword: ${card.password}`}
-                        label="Copy details"
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <LinkAndAdmitCards
+              exam={exam}
+              examLink={examLink}
+              isActive={isActive}
+              busy={busy}
+              onGenerate={() => run('admit-cards')}
+            />
           )}
         </>
       ) : null}

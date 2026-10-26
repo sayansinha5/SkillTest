@@ -141,3 +141,77 @@ def generate_mcqs(
     if len(questions) == 0:
         raise RuntimeError("No questions generated")
     return questions[:total_questions]
+
+
+def _report_completion(system: str, payload: dict) -> dict:
+    settings = get_settings()
+    completion = _client().chat.completions.create(
+        model=settings.ai_model,
+        temperature=0.3,
+        messages=[
+            {"role": "system", "content": system},
+            {"role": "user", "content": json.dumps(payload)},
+        ],
+    )
+    data = _parse_json_content(completion.choices[0].message.content or "{}")
+    if not isinstance(data, dict) or not data.get("summary"):
+        raise RuntimeError("OpenAI did not return a report")
+    return data
+
+
+def write_student_report(student_name: str, scored: dict) -> dict[str, Any]:
+    missed = [
+        {
+            "chapter": q["chapter"],
+            "question": q["stem"],
+            "chosen": q["options"].get(q["selected_option"]) if q["selected_option"] else None,
+            "correct": q["options"].get(q["correct_option"]),
+        }
+        for q in scored["questions"]
+        if not q["is_correct"]
+    ]
+    data = _report_completion(
+        (
+            "You are a supportive school teacher writing a short report card for one student after an MCQ test. "
+            "Base every point only on the provided results. Return JSON only: "
+            '{"summary":"2-3 sentences","strengths":["..."],"gaps":["..."],"next_steps":["..."]} '
+            "Refer to chapters/topics by name. Keep each list to at most 3 short items; use [] if none apply."
+        ),
+        {
+            "student": student_name,
+            "score": scored["score"],
+            "max_score": scored["max_score"],
+            "chapters": scored["chapters"],
+            "missed_questions": missed,
+        },
+    )
+    return {
+        "summary": str(data.get("summary", "")),
+        "strengths": [str(s) for s in data.get("strengths") or []],
+        "gaps": [str(s) for s in data.get("gaps") or []],
+        "next_steps": [str(s) for s in data.get("next_steps") or []],
+    }
+
+
+def write_class_report(exam_name: str, class_data: dict) -> dict[str, Any]:
+    data = _report_completion(
+        (
+            "You are an experienced teacher reviewing class results of an MCQ test to decide what to reteach "
+            "and which students need attention. Base every point only on the provided data. Return JSON only: "
+            '{"summary":"2-3 sentences","strong_areas":["..."],"weak_areas":["..."],'
+            '"students_needing_attention":[{"name":"...","reason":"..."}],"teaching_suggestions":["..."]} '
+            "Keep each list to at most 4 short items; use [] if none apply."
+        ),
+        {"exam": exam_name, **class_data},
+    )
+    return {
+        "summary": str(data.get("summary", "")),
+        "strong_areas": [str(s) for s in data.get("strong_areas") or []],
+        "weak_areas": [str(s) for s in data.get("weak_areas") or []],
+        "students_needing_attention": [
+            {"name": str(s.get("name", "")), "reason": str(s.get("reason", ""))}
+            for s in data.get("students_needing_attention") or []
+            if isinstance(s, dict)
+        ],
+        "teaching_suggestions": [str(s) for s in data.get("teaching_suggestions") or []],
+    }
